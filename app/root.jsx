@@ -8,6 +8,7 @@ import {
 } from 'remix';
 
 import globalStyles from '~/styles/global.css';
+import Layout from '~/components/layout';
 
 export const links = () => {
   return [
@@ -39,7 +40,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <Layout>
+          <Outlet />
+        </Layout>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
