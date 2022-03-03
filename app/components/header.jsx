@@ -3,9 +3,11 @@ import Nav from './nav';
 
 export default function Header() {
   return (
-    <header>
+    <header className="header">
       <div className="bar">
-        <Link to="/">Sick Fits</Link>
+        <h1 className="logo">
+          <Link to="/">Sick Fits</Link>
+        </h1>
       </div>
       <div className="sub-bar">
         <p>Search</p>
