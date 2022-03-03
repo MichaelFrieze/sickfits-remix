@@ -1,7 +1,9 @@
+import Products from '~/components/products';
+
 export default function ProductsRoute() {
   return (
     <div>
-      <h1>Products Route</h1>
+      <Products />
     </div>
   );
 }
