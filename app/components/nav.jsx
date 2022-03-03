@@ -1,11 +1,12 @@
+import { Link } from 'remix';
+
 export default function Nav() {
   return (
     <nav>
-      <ul>
-        <li>Home</li>
-        <li>About</li>
-        <li>Contact</li>
-      </ul>
+      <Link to="/products">Products</Link>
+      <Link to="/sell">Sell</Link>
+      <Link to="/orders">Orders</Link>
+      <Link to="/account">Account</Link>
     </nav>
   );
 }
