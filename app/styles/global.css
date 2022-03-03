@@ -76,3 +76,9 @@ button {
   grid-template-columns: 1fr auto;
   border-bottom: 1px solid var(--black, black);
 }
+
+.inner {
+  max-width: var(--maxWidth);
+  margin: 0 auto;
+  padding: 2rem;
+}

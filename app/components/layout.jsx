@@ -5,7 +5,7 @@ export default function Layout({ children }) {
     <div>
       <Header />
       <h2>I am the layout component</h2>
-      {children}
+      <div className="inner">{children}</div>
     </div>
   );
 }
