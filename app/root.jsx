@@ -7,8 +7,26 @@ import {
   ScrollRestoration,
 } from 'remix';
 
+import globalStyles from '~/styles/global.css';
+
+export const links = () => {
+  return [
+    {
+      rel: 'stylesheet',
+      href: globalStyles,
+    },
+  ];
+};
+
 export function meta() {
-  return { title: 'Sick Fits' };
+  const description = 'Remix eCommerce store';
+  const keywords = 'Sick Fits Clothes Shopping Remix KeystoneJS';
+  const title = 'Sick Fits';
+  return {
+    description,
+    keywords,
+    title,
+  };
 }
 
 export default function App() {
