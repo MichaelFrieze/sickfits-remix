@@ -5,10 +5,10 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "remix";
+} from 'remix';
 
 export function meta() {
-  return { title: "New Remix App" };
+  return { title: 'Sick Fits' };
 }
 
 export default function App() {
