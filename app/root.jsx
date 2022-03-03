@@ -5,16 +5,25 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useTransition,
 } from 'remix';
+import { useEffect } from 'react';
+import NProgress from 'nprogress';
+
+import Layout from '~/components/layout';
 
 import globalStyles from '~/styles/global.css';
-import Layout from '~/components/layout';
+import nprogressStyles from '~/styles/nprogress.css';
 
 export const links = () => {
   return [
     {
       rel: 'stylesheet',
       href: globalStyles,
+    },
+    {
+      rel: 'stylesheet',
+      href: nprogressStyles,
     },
   ];
 };
@@ -31,6 +40,16 @@ export function meta() {
 }
 
 export default function App() {
+  const transition = useTransition();
+
+  useEffect(() => {
+    if (transition.state === 'loading' || transition.state === 'submitting') {
+      NProgress.start();
+    } else {
+      NProgress.done();
+    }
+  }, [transition.state]);
+
   return (
     <html lang="en">
       <head>
