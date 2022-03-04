@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useLoaderData } from 'remix';
 import Products from '~/components/products';
 import productStyles from '~/styles/products.css';
@@ -21,7 +22,20 @@ export let meta = () => {
 export { loader } from '~/routes/api/products';
 
 export default function ProductsRoute() {
-  let data = useLoaderData();
+  // let data = useLoaderData();
+  const [data, setData] = useState([]);
+  let data2;
+
+  useEffect(() => {
+    const getProducts = async () => {
+      const res = await fetch(`/api/products`);
+      const results = await res.json();
+
+      setData(results);
+    };
+
+    getProducts();
+  }, []);
 
   return (
     <div>
