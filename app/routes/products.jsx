@@ -1,4 +1,4 @@
-import { useLoaderData, json, Link } from 'remix';
+import { useLoaderData, json, useTransition } from 'remix';
 import { gql } from 'graphql-request';
 import Products from '~/components/products';
 import productStyles from '~/styles/products.css';
@@ -38,7 +38,14 @@ const ALL_PRODUCTS_QUERY = gql`
 `;
 
 export let loader = async () => {
-  const data = await client.request(ALL_PRODUCTS_QUERY);
+  let data = await client.request(ALL_PRODUCTS_QUERY);
+
+  let sleep = (milliseconds) => {
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
+  };
+
+  await sleep(1000);
+
   return data;
 };
 
