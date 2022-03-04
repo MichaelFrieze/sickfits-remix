@@ -24,18 +24,21 @@ export { loader } from '~/routes/api/products';
 export default function ProductsRoute() {
   // let data = useLoaderData();
   const [data, setData] = useState([]);
-  let data2;
+  const [checkData, setCheckData] = useState([]);
 
   useEffect(() => {
     const getProducts = async () => {
       const res = await fetch(`/api/products`);
       const results = await res.json();
+      setCheckData(results);
 
-      setData(results);
+      if (checkData !== data) {
+        setData(results);
+      }
     };
 
     getProducts();
-  }, []);
+  }, [data]);
 
   return (
     <div>
