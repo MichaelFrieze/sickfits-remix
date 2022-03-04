@@ -1,6 +1,6 @@
 import { useLoaderData, json, Link } from 'remix';
 import { gql } from 'graphql-request';
-// import Products from '~/components/products';
+import Products from '~/components/products';
 import productStyles from '~/styles/products.css';
 import { client } from '~/utils/graphql-client';
 
@@ -39,21 +39,16 @@ const ALL_PRODUCTS_QUERY = gql`
 
 export let loader = async () => {
   const data = await client.request(ALL_PRODUCTS_QUERY);
-
-  console.log('data on server: ', data);
-
   return data;
 };
 
 export default function ProductsRoute() {
   let data = useLoaderData();
-  console.log('data on the client: ', data);
 
   return (
     <div>
       <p>just returning some data:</p>
-      {data}
-      {/* <Products /> */}
+      <Products data={data} />
     </div>
   );
 }

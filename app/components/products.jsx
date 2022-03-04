@@ -1,8 +1,6 @@
 import Product from './Product';
 
-export default function Products({ props }) {
-  let data = props;
-
+export default function Products({ data }) {
   return (
     <div>
       <div className="products-list">

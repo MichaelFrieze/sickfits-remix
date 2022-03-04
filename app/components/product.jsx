@@ -1,5 +1,5 @@
 import { Link } from 'remix';
-import formatMoney from '../lib/formatMoney';
+import formatMoney from '~/utils/formatMoney';
 
 export default function Product({ product }) {
   return (
