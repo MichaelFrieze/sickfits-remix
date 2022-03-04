@@ -1,4 +1,4 @@
-import { useLoaderData } from 'remix';
+import { useLoaderData, useCatch } from 'remix';
 import { gql } from 'graphql-request';
 import { client } from '~/utils/graphql-client';
 import Products from '~/components/products';
@@ -40,6 +40,12 @@ const ALL_PRODUCTS_QUERY = gql`
 export let loader = async () => {
   let data = await client.request(ALL_PRODUCTS_QUERY);
 
+  if (!data) {
+    throw new Response('No data found', {
+      status: 404,
+    });
+  }
+
   return data;
 };
 
@@ -52,4 +58,24 @@ export default function ProductsRoute() {
       <Products data={data} />
     </div>
   );
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+
+  if (caught.status === 404) {
+    return (
+      <>
+        <div className="error">
+          There is no data from the keystone back end to display.
+        </div>
+        <div className="error">{caught.data}</div>
+      </>
+    );
+  }
+  throw new Error(`Unexpected caught response with status: ${caught.status}`);
+}
+
+export function ErrorBoundary() {
+  return <div className="error">I did a whoopsies.</div>;
 }

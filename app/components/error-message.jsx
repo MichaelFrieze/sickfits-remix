@@ -1,5 +1,5 @@
-const DisplayError = ({ error }) => {
-  if (!error || !error.message) return null;
+export default function DisplayError({ error }) {
+  if (!error) return null;
   if (
     error.networkError &&
     error.networkError.result &&
@@ -14,6 +14,7 @@ const DisplayError = ({ error }) => {
       </div>
     ));
   }
+
   return (
     <div className="error">
       <p data-test="graphql-error">
@@ -22,6 +23,4 @@ const DisplayError = ({ error }) => {
       </p>
     </div>
   );
-};
-
-export default DisplayError;
+}

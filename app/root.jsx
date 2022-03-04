@@ -6,6 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
   useTransition,
+  useCatch,
 } from 'remix';
 import { useEffect } from 'react';
 import NProgress from 'nprogress';
@@ -51,6 +52,14 @@ export default function App() {
   }, [transition.state]);
 
   return (
+    <Document>
+      <Outlet />
+    </Document>
+  );
+}
+
+function Document({ children }) {
+  return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
@@ -59,13 +68,38 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Layout>
-          <Outlet />
-        </Layout>
+        <Layout>{children}</Layout>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
       </body>
     </html>
+  );
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+
+  return (
+    <Document>
+      <div className="error">
+        <h1>
+          {caught.status} {caught.statusText}
+        </h1>
+      </div>
+    </Document>
+  );
+}
+
+export function ErrorBoundary({ error }) {
+  console.error(error);
+
+  return (
+    <Document>
+      <div className="error">
+        <h1>App Error</h1>
+        <pre>{error.message}</pre>
+      </div>
+    </Document>
   );
 }
