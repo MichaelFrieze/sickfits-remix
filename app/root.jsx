@@ -5,13 +5,51 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "remix";
+  useTransition,
+} from 'remix';
+import { useEffect } from 'react';
+import NProgress from 'nprogress';
+
+import Layout from '~/components/layout';
+
+import globalStyles from '~/styles/global.css';
+import nprogressStyles from '~/styles/nprogress.css';
+
+export const links = () => {
+  return [
+    {
+      rel: 'stylesheet',
+      href: globalStyles,
+    },
+    {
+      rel: 'stylesheet',
+      href: nprogressStyles,
+    },
+  ];
+};
 
 export function meta() {
-  return { title: "New Remix App" };
+  const description = 'Remix eCommerce store';
+  const keywords = 'Sick Fits Clothes Shopping Remix KeystoneJS';
+  const title = 'Sick Fits';
+  return {
+    description,
+    keywords,
+    title,
+  };
 }
 
 export default function App() {
+  const transition = useTransition();
+
+  useEffect(() => {
+    if (transition.state === 'loading' || transition.state === 'submitting') {
+      NProgress.start();
+    } else {
+      NProgress.done();
+    }
+  }, [transition.state]);
+
   return (
     <html lang="en">
       <head>
@@ -21,7 +59,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <Layout>
+          <Outlet />
+        </Layout>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
