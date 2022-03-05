@@ -48,7 +48,6 @@ export default function ProductsRoute() {
 
   return (
     <div>
-      <p>just returning some data:</p>
       <Products data={data} />
     </div>
   );
