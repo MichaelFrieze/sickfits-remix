@@ -1,12 +1,15 @@
 import { Link } from 'remix';
+import navStyles from '~/styles/components/nav.css';
 
-export default function Nav() {
+export let links = () => [{ rel: 'stylesheet', href: navStyles }];
+
+export let Nav = () => {
   return (
-    <nav>
+    <ul className="nav">
       <Link to="/products">Products</Link>
       <Link to="/sell">Sell</Link>
       <Link to="/orders">Orders</Link>
       <Link to="/account">Account</Link>
-    </nav>
+    </ul>
   );
-}
+};

@@ -37,20 +37,6 @@
   padding: 1rem;
 }
 
-.price-tag {
-  background: var(--red);
-  transform: rotate(3deg);
-  color: white;
-  font-weight: 600;
-  padding: 5px;
-  line-height: 1;
-  font-size: 3rem;
-  display: inline-block;
-  position: absolute;
-  top: -3px;
-  right: -3px;
-}
-
 .title {
   margin: 0 1rem;
   text-align: center;
@@ -69,8 +55,16 @@
   padding: 0 1rem;
 }
 
-.products-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 60px;
+.price-tag {
+  background: var(--red);
+  transform: rotate(3deg);
+  color: white;
+  font-weight: 600;
+  padding: 5px;
+  line-height: 1;
+  font-size: 3rem;
+  display: inline-block;
+  position: absolute;
+  top: -3px;
+  right: -3px;
 }

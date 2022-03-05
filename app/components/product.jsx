@@ -1,7 +1,10 @@
 import { Link } from 'remix';
 import formatMoney from '~/utils/formatMoney';
+import productStyles from '~/styles/components/product.css';
 
-export default function Product({ product }) {
+export let links = () => [{ rel: 'stylesheet', href: productStyles }];
+
+export let Product = ({ product }) => {
   return (
     <div className="item">
       <img
@@ -16,4 +19,4 @@ export default function Product({ product }) {
       {/* TODO: Add buttons to edit and delte item */}
     </div>
   );
-}
+};

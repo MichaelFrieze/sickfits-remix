@@ -1,6 +1,12 @@
-import Product from './Product';
+import { Product, links as productStyles } from './product';
+import productsStyles from '~/styles/components/products.css';
 
-export default function Products({ data }) {
+export let links = () => [
+  ...productStyles(),
+  { rel: 'stylesheet', href: productsStyles },
+];
+
+export let Products = ({ data }) => {
   return (
     <div>
       <div className="products-list">
@@ -10,4 +16,4 @@ export default function Products({ data }) {
       </div>
     </div>
   );
-}
+};

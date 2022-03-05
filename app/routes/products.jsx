@@ -1,16 +1,10 @@
 import { useLoaderData, useCatch } from 'remix';
 import { gql } from 'graphql-request';
 import { client } from '~/utils/graphql-client';
-import Products from '~/components/products';
-import productStyles from '~/styles/products.css';
+import { Products, links as productsStyles } from '~/components/products';
 
 export let links = () => {
-  return [
-    {
-      rel: 'stylesheet',
-      href: productStyles,
-    },
-  ];
+  return [...productsStyles()];
 };
 
 export let meta = () => {

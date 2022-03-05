@@ -11,21 +11,22 @@ import {
 import { useEffect } from 'react';
 import NProgress from 'nprogress';
 
-import Layout from '~/components/layout';
+import { Layout, links as layoutLinks } from '~/components/layout';
 
-import globalStyles from '~/styles/global.css';
+import rootStyles from '~/styles/root.css';
 import nprogressStyles from '~/styles/nprogress.css';
 
 export const links = () => {
   return [
     {
       rel: 'stylesheet',
-      href: globalStyles,
+      href: rootStyles,
     },
     {
       rel: 'stylesheet',
       href: nprogressStyles,
     },
+    ...layoutLinks(),
   ];
 };
 
