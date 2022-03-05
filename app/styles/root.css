@@ -47,38 +47,19 @@ button {
     Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue';
 }
 
-.logo {
-  font-size: 4rem;
-  margin-left: 2rem;
-  position: relative;
-  z-index: 2;
-  background: red;
-  transform: skew(-7deg);
-}
-
-.logo a {
-  color: white;
-  text-decoration: none;
-  text-transform: uppercase;
-  padding: 0.5rem 1rem;
-}
-
-.header .bar {
-  border-bottom: 10px solid var(--black, black);
-  display: grid;
-  grid-template-columns: auto 1fr;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.header .sub-bar {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  border-bottom: 1px solid var(--black, black);
-}
-
-.inner {
-  max-width: var(--maxWidth);
-  margin: 0 auto;
+.error {
   padding: 2rem;
+  background: white;
+  margin: 2rem 0;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-left: 5px solid red;
+}
+
+.error p {
+  margin: 0;
+  font-weight: 100;
+}
+
+.error strong {
+  margin-right: 1rem;
 }

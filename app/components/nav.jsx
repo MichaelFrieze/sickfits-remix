@@ -1,12 +1,23 @@
-import { Link } from 'remix';
+import { NavLink } from 'remix';
+import navStyles from '~/styles/components/nav.css';
 
-export default function Nav() {
+export let links = () => [{ rel: 'stylesheet', href: navStyles }];
+
+export let Nav = () => {
   return (
-    <nav>
-      <Link to="/products">Products</Link>
-      <Link to="/sell">Sell</Link>
-      <Link to="/orders">Orders</Link>
-      <Link to="/account">Account</Link>
-    </nav>
+    <ul className="nav">
+      <NavLink prefetch="intent" to="/products">
+        Products
+      </NavLink>
+      <NavLink prefetch="intent" to="/sell">
+        Sell
+      </NavLink>
+      <NavLink prefetch="intent" to="/orders">
+        Orders
+      </NavLink>
+      <NavLink prefetch="intent" to="/account">
+        Account
+      </NavLink>
+    </ul>
   );
-}
+};

@@ -1,18 +1,26 @@
 import { Link } from 'remix';
-import Nav from './nav';
+import { Nav, links as navLinks } from './nav';
+import headerStyles from '~/styles/components/header.css';
 
-export default function Header() {
+export let links = () => [
+  ...navLinks(),
+  { rel: 'stylesheet', href: headerStyles },
+];
+
+export let Header = () => {
   return (
     <header className="header">
       <div className="bar">
         <h1 className="logo">
-          <Link to="/">Sick Fits</Link>
+          <Link prefetch="intent" to="/">
+            Sick Fits
+          </Link>
         </h1>
+        <Nav />
       </div>
       <div className="sub-bar">
         <p>Search</p>
       </div>
-      <Nav />
     </header>
   );
-}
+};
