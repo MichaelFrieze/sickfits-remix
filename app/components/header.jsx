@@ -12,7 +12,9 @@ export let Header = () => {
     <header className="header">
       <div className="bar">
         <h1 className="logo">
-          <Link to="/">Sick Fits</Link>
+          <Link prefetch="intent" to="/">
+            Sick Fits
+          </Link>
         </h1>
         <Nav />
       </div>
