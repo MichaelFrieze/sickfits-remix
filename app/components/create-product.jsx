@@ -1,7 +1,17 @@
-import { Form } from 'remix';
+import { Form, useTransition } from 'remix';
 
 export let CreateProduct = () => {
+  let transition = useTransition();
+  let busy = transition.submission;
+  let isCreating =
+    transition.state === 'submitting' &&
+    transition.submission.formData.get('_action') === 'create';
+  let isDeleting =
+    transition.state === 'submitting' &&
+    transition.submission.formData.get('_action') === 'delete';
+
   let myName = 'Michael Frieze';
+
   return (
     <>
       <Form method="post">
@@ -25,11 +35,21 @@ export let CreateProduct = () => {
           />
         </label>
         <br />
-        <button type="submit" name="_action" value="create">
-          create
+        <button
+          disabled={isCreating}
+          type="submit"
+          name="_action"
+          value="create"
+        >
+          {isCreating ? "I'm creating..." : 'create'}
         </button>{' '}
-        <button type="submit" name="_action" value="delete">
-          delete
+        <button
+          disabled={isDeleting}
+          type="submit"
+          name="_action"
+          value="delete"
+        >
+          {isDeleting ? "I'm deleting..." : 'delete'}
         </button>{' '}
         <button type="submit" name="_action" value="error">
           error
@@ -38,8 +58,8 @@ export let CreateProduct = () => {
       <br />
       <Form method="post">
         <input type="hidden" name="myName" value={myName} />
-        <button type="submit" name="_action" value="hidden">
-          hidden
+        <button disabled={busy} type="submit" name="_action" value="hidden">
+          {busy ? "I'm busy..." : 'hidden input'}
         </button>
       </Form>
     </>

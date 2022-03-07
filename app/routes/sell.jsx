@@ -12,13 +12,18 @@ export let action = async ({ request }) => {
   let formData = await request.formData();
   let { _action, ...values } = Object.fromEntries(formData);
 
+  // slowing the action function down to see pending UI easier on the button
+  await new Promise((res) => {
+    setTimeout(res, 2000);
+  });
+
   if (_action === 'create') {
     console.log(values);
     return values;
   }
 
   if (_action === 'delete') {
-    let text = 'There is nothing to delete!';
+    let text = 'There is nothing to delete since there is no DB!';
     console.log(text);
     return text;
   }
