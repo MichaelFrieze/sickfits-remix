@@ -14,7 +14,7 @@ export let action = async ({ request }) => {
 
   // slowing the action function down to see pending UI easier on the button
   await new Promise((res) => {
-    setTimeout(res, 2000);
+    setTimeout(res, 1000);
   });
 
   if (_action === 'create') {
@@ -23,12 +23,17 @@ export let action = async ({ request }) => {
   }
 
   if (_action === 'delete') {
-    let text = 'There is nothing to delete since there is no DB!';
+    let text = 'There is nothing to delete since there is no DB connection!';
     console.log(text);
     return text;
   }
 
   if (_action === 'hidden') {
+    console.log(values);
+    return values;
+  }
+
+  if (_action === 'addingName') {
     console.log(values);
     return values;
   }

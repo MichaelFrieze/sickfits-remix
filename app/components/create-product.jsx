@@ -1,8 +1,12 @@
+import { useRef, useEffect } from 'react';
 import { Form, useTransition } from 'remix';
 
 export let CreateProduct = () => {
   let transition = useTransition();
   let busy = transition.submission;
+  let isAddingName =
+    transition.state === 'submitting' &&
+    transition.submission.formData.get('_action') === 'addingName';
   let isCreating =
     transition.state === 'submitting' &&
     transition.submission.formData.get('_action') === 'create';
@@ -10,11 +14,21 @@ export let CreateProduct = () => {
     transition.state === 'submitting' &&
     transition.submission.formData.get('_action') === 'delete';
 
-  let myName = 'Michael Frieze';
+  let hiddenValue = 'Some hidden text';
+
+  let formRef = useRef();
+  let firstNameRef = useRef();
+
+  useEffect(() => {
+    if (!isAddingName) {
+      formRef.current?.reset();
+      firstNameRef.current?.focus();
+    }
+  }, [isAddingName]);
 
   return (
     <>
-      <Form method="post">
+      <Form replace method="post">
         <label htmlFor="product-name">
           Product Name:{' '}
           <input
@@ -56,8 +70,21 @@ export let CreateProduct = () => {
         </button>
       </Form>
       <br />
-      <Form method="post">
-        <input type="hidden" name="myName" value={myName} />
+      <Form ref={formRef} replace method="post">
+        <input
+          ref={firstNameRef}
+          type="text"
+          name="firstName"
+          placeholder="First Name"
+        />{' '}
+        <input type="text" name="lastName" placeholder="Last Name" />{' '}
+        <button disabled={busy} type="submit" name="_action" value="addingName">
+          {isAddingName ? "I'm adding name..." : 'add name'}
+        </button>
+      </Form>
+      <br />
+      <Form replace method="post">
+        <input type="hidden" name="hiddenValue" value={hiddenValue} />
         <button disabled={busy} type="submit" name="_action" value="hidden">
           {busy ? "I'm busy..." : 'hidden input'}
         </button>
