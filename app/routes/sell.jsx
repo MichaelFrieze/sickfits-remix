@@ -1,4 +1,10 @@
-import { useActionData, useLoaderData } from 'remix';
+import {
+  useActionData,
+  useLoaderData,
+  unstable_parseMultipartFormData,
+  unstable_createFileUploadHandler,
+  useTransition,
+} from 'remix';
 
 import {
   CreateProduct,
@@ -11,6 +17,7 @@ export let links = () => {
 
 export let loader = () => {
   let initialValues = {
+    image: '',
     name: 'Nice Shoes',
     price: 34234,
     description: 'These are the best shoes!',
@@ -20,24 +27,27 @@ export let loader = () => {
 };
 
 export let action = async ({ request }) => {
-  let formData = await request.formData();
+  const uploadHandler = unstable_createFileUploadHandler({
+    maxFileSize: 5_000_000,
+    file: ({ filename }) => filename,
+  });
+
+  let formData = await unstable_parseMultipartFormData(request, uploadHandler);
+  // let formData = await request.formData();
+
   let { _action, ...values } = Object.fromEntries(formData);
 
-  let reset = 'false';
+  console.log(values);
 
-  if (_action === 'reset') {
-    reset = 'true';
-    return {
-      reset,
-    };
-  }
+  return values;
 };
 
 export default function SellRoute() {
   let actionData = useActionData();
   let loaderData = useLoaderData();
-  console.log(loaderData);
+  // console.log(loaderData);
   console.log(actionData);
+  console.log(useTransition());
 
   return (
     <div>
