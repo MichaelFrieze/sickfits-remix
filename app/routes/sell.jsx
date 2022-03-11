@@ -5,7 +5,8 @@ import {
   unstable_createFileUploadHandler,
   useTransition,
 } from 'remix';
-
+import { gql } from 'graphql-request';
+import { client } from '~/utils/graphql-client';
 import {
   CreateProduct,
   links as createProductStyles,
@@ -15,9 +16,33 @@ export let links = () => {
   return [...createProductStyles()];
 };
 
+const CREATE_PRODUCT_MUTATION = gql`
+  mutation CREATE_PRODUCT_MUTATION(
+    # Which variables are getting passed in? And What types are they
+    $name: String!
+    $price: Int!
+    $description: String!
+    $image: Upload
+  ) {
+    createProduct(
+      data: {
+        name: $name
+        description: $description
+        price: $price
+        status: "AVAILABLE"
+        photo: { create: { image: $image, altText: $name } }
+      }
+    ) {
+      id
+      price
+      description
+      name
+    }
+  }
+`;
+
 export let loader = () => {
   let initialValues = {
-    image: '',
     name: 'Nice Shoes',
     price: 34234,
     description: 'These are the best shoes!',
@@ -35,11 +60,22 @@ export let action = async ({ request }) => {
   let formData = await unstable_parseMultipartFormData(request, uploadHandler);
   // let formData = await request.formData();
 
-  let { _action, ...values } = Object.fromEntries(formData);
+  let { _action, name, price, description } = Object.fromEntries(formData);
 
-  console.log(values);
+  let values = {
+    name,
+    price: parseInt(price),
+    description,
+  };
 
-  return values;
+  console.log('values: ', values);
+  console.log('action: ', _action);
+
+  let data = await client.request(CREATE_PRODUCT_MUTATION, values);
+
+  console.log(data);
+
+  return data;
 };
 
 export default function SellRoute() {
@@ -47,7 +83,6 @@ export default function SellRoute() {
   let loaderData = useLoaderData();
   // console.log(loaderData);
   console.log(actionData);
-  console.log(useTransition());
 
   return (
     <div>
