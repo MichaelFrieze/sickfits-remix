@@ -4,8 +4,8 @@ import {
   unstable_parseMultipartFormData,
   unstable_createFileUploadHandler,
 } from 'remix';
-import { gql } from 'graphql-request';
-import { client } from '~/utils/graphql-client';
+import { graphqlClient } from '~/utils/withData';
+import gql from 'graphql-tag';
 import {
   CreateProduct,
   links as createProductStyles,
@@ -69,10 +69,12 @@ export let action = async ({ request }) => {
     formImage,
   };
 
-  console.log('Values from form: ', values);
-  console.log('Image from form: ', formImage);
+  console.log('Values in action function: ', values);
 
-  let data = await client.request(CREATE_PRODUCT_MUTATION, values);
+  let data = await graphqlClient.mutate({
+    mutation: CREATE_PRODUCT_MUTATION,
+    variables: values,
+  });
 
   return data;
 };
