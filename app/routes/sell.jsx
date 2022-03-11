@@ -3,7 +3,6 @@ import {
   useLoaderData,
   unstable_parseMultipartFormData,
   unstable_createFileUploadHandler,
-  useTransition,
 } from 'remix';
 import { gql } from 'graphql-request';
 import { client } from '~/utils/graphql-client';
@@ -58,22 +57,22 @@ export let action = async ({ request }) => {
   });
 
   let formData = await unstable_parseMultipartFormData(request, uploadHandler);
-  // let formData = await request.formData();
 
-  let { _action, name, price, description } = Object.fromEntries(formData);
+  let { image, name, price, description } = Object.fromEntries(formData);
+
+  let formImage = { ...image };
 
   let values = {
     name,
     price: parseInt(price),
     description,
+    formImage,
   };
 
-  console.log('values: ', values);
-  console.log('action: ', _action);
+  console.log('Values from form: ', values);
+  console.log('Image from form: ', formImage);
 
   let data = await client.request(CREATE_PRODUCT_MUTATION, values);
-
-  console.log(data);
 
   return data;
 };
@@ -81,8 +80,7 @@ export let action = async ({ request }) => {
 export default function SellRoute() {
   let actionData = useActionData();
   let loaderData = useLoaderData();
-  // console.log(loaderData);
-  console.log(actionData);
+  console.log('ActionData: ', actionData);
 
   return (
     <div>

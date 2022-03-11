@@ -1,4 +1,4 @@
-import { Form, useTransition } from 'remix';
+import { Form } from 'remix';
 
 import formStyles from '~/styles/components/form.css';
 
@@ -8,10 +8,10 @@ export let CreateProduct = ({ initialValues }) => {
   return (
     <Form method="post" className="form" encType="multipart/form-data">
       <fieldset>
-        {/* <label htmlFor="image">
+        <label htmlFor="image">
           Image
           <input type="file" id="image" name="image" />
-        </label> */}
+        </label>
         <label htmlFor="name">
           Name
           <input
