@@ -2,9 +2,9 @@ import {
   useActionData,
   useLoaderData,
   unstable_parseMultipartFormData,
-  unstable_createFileUploadHandler,
+  unstable_createMemoryUploadHandler,
 } from 'remix';
-import { graphqlClient } from '~/utils/withData';
+import { graphqlClient } from '~/utils/graphql-client';
 import gql from 'graphql-tag';
 import {
   CreateProduct,
@@ -14,31 +14,6 @@ import {
 export let links = () => {
   return [...createProductStyles()];
 };
-
-const CREATE_PRODUCT_MUTATION = gql`
-  mutation CREATE_PRODUCT_MUTATION(
-    # Which variables are getting passed in? And What types are they
-    $name: String!
-    $price: Int!
-    $description: String!
-    $image: Upload
-  ) {
-    createProduct(
-      data: {
-        name: $name
-        description: $description
-        price: $price
-        status: "AVAILABLE"
-        photo: { create: { image: $image, altText: $name } }
-      }
-    ) {
-      id
-      price
-      description
-      name
-    }
-  }
-`;
 
 export let loader = () => {
   let initialValues = {
@@ -51,22 +26,44 @@ export let loader = () => {
 };
 
 export let action = async ({ request }) => {
-  const uploadHandler = unstable_createFileUploadHandler({
-    maxFileSize: 5_000_000,
-    file: ({ filename }) => filename,
+  const CREATE_PRODUCT_MUTATION = gql`
+    mutation CREATE_PRODUCT_MUTATION(
+      # Which variables are getting passed in? And What types are they
+      $name: String!
+      $price: Int!
+      $description: String!
+      $image: Upload
+    ) {
+      createProduct(
+        data: {
+          name: $name
+          description: $description
+          price: $price
+          status: "AVAILABLE"
+          photo: { create: { image: $image, altText: $name } }
+        }
+      ) {
+        id
+        price
+        description
+        name
+      }
+    }
+  `;
+
+  const uploadHandler = unstable_createMemoryUploadHandler({
+    maxFileSize: 500_000,
   });
 
   let formData = await unstable_parseMultipartFormData(request, uploadHandler);
 
   let { image, name, price, description } = Object.fromEntries(formData);
 
-  let formImage = { ...image };
-
   let values = {
     name,
     price: parseInt(price),
     description,
-    formImage,
+    // image,
   };
 
   console.log('Values in action function: ', values);
