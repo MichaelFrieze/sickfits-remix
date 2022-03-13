@@ -1,51 +1,89 @@
-import { useActionData } from 'remix';
+import {
+  useActionData,
+  useLoaderData,
+  unstable_parseMultipartFormData,
+  unstable_createMemoryUploadHandler,
+} from 'remix';
+import { graphqlClient } from '~/utils/graphql-client';
+// import gql from 'graphql-tag';
+import { gql } from 'graphql-request';
+import fs from 'fs';
 
-import { CreateProduct } from '~/components/create-product';
+import {
+  CreateProduct,
+  links as createProductStyles,
+} from '~/components/create-product';
+
+export let links = () => {
+  return [...createProductStyles()];
+};
+
+export let loader = () => {
+  let initialValues = {
+    name: 'Nice Shoes',
+    price: 34234,
+    description: 'These are the best shoes!',
+  };
+
+  return initialValues;
+};
 
 export let action = async ({ request }) => {
-  // Multiple Forms and Single Button Mutations
-  // https://www.youtube.com/watch?v=w2i-9cYxSdc&list=PLXoynULbYuEDG2wBFSZ66b85EIspy3fy6&index=5
+  const CREATE_PRODUCT_MUTATION = gql`
+    mutation CREATE_PRODUCT_MUTATION(
+      # Which variables are getting passed in? And What types are they
+      $name: String
+      $price: Int
+      $description: String
+      $image: Upload
+    ) {
+      createProduct(
+        data: {
+          name: $name
+          description: $description
+          price: $price
+          status: "AVAILABLE"
+          photo: { create: { image: $image, altText: $name } }
+        }
+      ) {
+        id
+        price
+        description
+        name
+      }
+    }
+  `;
 
-  // _action is the name of the button and will be equal to button values
-  // For some reason, you cannot use "action" as a name because the browser uses it for other purposes
-  // You can use any other name such as "do" or "perform"
-  let formData = await request.formData();
-  let { _action, ...values } = Object.fromEntries(formData);
-
-  // slowing the action function down to see pending UI easier on the button
-  await new Promise((res) => {
-    setTimeout(res, 1000);
+  const uploadHandler = unstable_createMemoryUploadHandler({
+    maxFileSize: 500_000,
   });
 
-  if (_action === 'create') {
-    console.log(values);
-    return values;
-  }
+  let formData = await unstable_parseMultipartFormData(request, uploadHandler);
 
-  if (_action === 'delete') {
-    let text = 'There is nothing to delete since there is no DB connection!';
-    console.log(text);
-    return text;
-  }
+  let { image, name, price, description } = Object.fromEntries(formData);
 
-  if (_action === 'hidden') {
-    console.log(values);
-    return values;
-  }
+  let values = {
+    name,
+    price: parseInt(price),
+    description,
+    image: formData.get('image'),
+  };
 
-  if (_action === 'addingName') {
-    console.log(values);
-    return values;
-  }
+  console.log('Values in action function: ', values);
+
+  let data = await graphqlClient.request(CREATE_PRODUCT_MUTATION, values);
+
+  return data;
 };
 
 export default function SellRoute() {
   let actionData = useActionData();
-  console.log(actionData);
+  let loaderData = useLoaderData();
+  console.log('ActionData: ', actionData);
 
   return (
     <div>
-      <CreateProduct />
+      <CreateProduct initialValues={loaderData} />
     </div>
   );
 }

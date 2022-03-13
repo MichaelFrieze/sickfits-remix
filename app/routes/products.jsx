@@ -1,6 +1,8 @@
 import { useLoaderData, useCatch } from 'remix';
+import { graphqlClient } from '~/utils/graphql-client';
+// import gql from 'graphql-tag';
 import { gql } from 'graphql-request';
-import { client } from '~/utils/graphql-client';
+
 import { Products, links as productsStyles } from '~/components/products';
 
 export let links = () => {
@@ -14,33 +16,33 @@ export let meta = () => {
   };
 };
 
-const ALL_PRODUCTS_QUERY = gql`
-  query ALL_PRODUCTS_QUERY {
-    allProducts {
-      id
-      name
-      price
-      description
-      photo {
+export let loader = async () => {
+  const ALL_PRODUCTS_QUERY = gql`
+    query ALL_PRODUCTS_QUERY {
+      allProducts {
         id
-        image {
-          publicUrlTransformed
+        name
+        price
+        description
+        photo {
+          id
+          image {
+            publicUrlTransformed
+          }
         }
       }
     }
-  }
-`;
+  `;
 
-export let loader = async () => {
-  let data = await client.request(ALL_PRODUCTS_QUERY);
+  let queryResults = await graphqlClient.request(ALL_PRODUCTS_QUERY);
 
-  if (!data) {
-    throw new Response('No data found', {
+  if (!queryResults) {
+    throw new Response('No query results found', {
       status: 404,
     });
   }
 
-  return data;
+  return queryResults;
 };
 
 export default function ProductsRoute() {
