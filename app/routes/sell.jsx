@@ -5,7 +5,10 @@ import {
   unstable_createMemoryUploadHandler,
 } from 'remix';
 import { graphqlClient } from '~/utils/graphql-client';
-import gql from 'graphql-tag';
+// import gql from 'graphql-tag';
+import { gql } from 'graphql-request';
+import fs from 'fs';
+
 import {
   CreateProduct,
   links as createProductStyles,
@@ -29,9 +32,9 @@ export let action = async ({ request }) => {
   const CREATE_PRODUCT_MUTATION = gql`
     mutation CREATE_PRODUCT_MUTATION(
       # Which variables are getting passed in? And What types are they
-      $name: String!
-      $price: Int!
-      $description: String!
+      $name: String
+      $price: Int
+      $description: String
       $image: Upload
     ) {
       createProduct(
@@ -63,15 +66,12 @@ export let action = async ({ request }) => {
     name,
     price: parseInt(price),
     description,
-    // image,
+    image: formData.get('image'),
   };
 
   console.log('Values in action function: ', values);
 
-  let data = await graphqlClient.mutate({
-    mutation: CREATE_PRODUCT_MUTATION,
-    variables: values,
-  });
+  let data = await graphqlClient.request(CREATE_PRODUCT_MUTATION, values);
 
   return data;
 };
