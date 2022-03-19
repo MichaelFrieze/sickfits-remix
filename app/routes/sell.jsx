@@ -58,15 +58,21 @@ export let action = async ({ request }) => {
     maxFileSize: 500_000,
   });
 
+  // const uploadHandler = unstable_createFileUploadHandler({
+  //   maxFileSize: 5_000_000,
+  //   file: ({ filename }) => filename,
+  // });
+
   let formData = await unstable_parseMultipartFormData(request, uploadHandler);
 
-  let { image, name, price, description } = Object.fromEntries(formData);
+  let { name, price, description } = Object.fromEntries(formData);
+  let file = formData.get('image');
 
   let values = {
     name,
     price: parseInt(price),
     description,
-    image: formData.get('image'),
+    // image: file,
   };
 
   console.log('Values in action function: ', values);
